@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import {useState, useEffect} from "react"
+import {getAllStarships} from './services/sw-api'
 import './App.css';
+import StarShipCard from "./component/StarShipCard";
 
 function App() {
+  
+  const [starShips, setStarShips] = useState([])
+   useEffect(() => {
+    const findShip = async () =>{
+      try{
+        const starShip = await getAllStarships()
+      
+        setStarShips(starShip)
+     
+      }catch(e){
+        console.log(e)
+      }
+    }
+    findShip()
+   }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <>
+      <header>STAR WARS STARSHIPS</header>
+      <div className="Ship">
+        {starShips.map((starShip, i) => {
+          return <StarShipCard starShip={starShip} key={i}/> 
+        })}
     </div>
-  );
+    </>
+  )
 }
 
 export default App;
